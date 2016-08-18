@@ -24,6 +24,11 @@ function loadUsers(username) {
 
 function renderSpinner(domNode) {
   // clean all content of passed node and then render element with `spinner` classname
+  const spinner = document.createElement('div')
+  spinner.className = 'spinner'
+
+  domNode.innerHTML = ''
+  domNode.appendChild(spinner)
 }
 
 function renderSearchResult(accounts) {
