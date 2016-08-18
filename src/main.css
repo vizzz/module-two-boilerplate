@@ -27,3 +27,7 @@ body {
 .search-results_item {
     margin: 8px 0 0;
 }
+
+.search-results_item.active{
+    background: pink
+}

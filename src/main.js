@@ -23,6 +23,13 @@ function getUsersList() {
 function getUserInfo(e) {
   const resultsNode = document.querySelector('.user-results')
   const accountId = e.target.dataset.accountId
+  const searchResults = document.querySelector('.search-results .active')
+
+
+  if (searchResults) {
+    searchResults.classList.remove('active')
+  }
+  e.target.classList.add('active')
 
   renderSpinner(resultsNode)
   loadUserInfo(accountId)
