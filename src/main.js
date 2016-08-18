@@ -41,14 +41,10 @@ function loadUsers(username) {
 }
 
 function renderSpinner(domNode) {
-  const spinner = document.createElement('div')
-  spinner.className = 'spinner'
-
-  domNode.innerHTML = ''
-  domNode.appendChild(spinner)
+  domNode.innerHTML = '<div class="spinner"></div>'
 }
 
-function renderUser(account) {
+function renderUsername(account) {
   return `
     <div class="search-results_item" data-account-id="${account.account_id}">
       ${account.nickname}
@@ -57,7 +53,7 @@ function renderUser(account) {
 }
 
 function renderSearchResult(node, accounts) {
-  const results = accounts.map(renderUser).join('')
+  const results = accounts.map(renderUsername).join('')
   node.innerHTML = results
 }
 
