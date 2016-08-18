@@ -34,7 +34,7 @@ function renderSearchResult(accounts) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const username = document.getElementById('username')
+  const username = document.getElementById('username').innerText
   const searchButton = document.getElementById('search')
   searchButton.addEventListener('click', getUsersList(username))
 })
