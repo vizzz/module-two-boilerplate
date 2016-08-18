@@ -10,6 +10,10 @@ you don't have to pass application_id query param.
 It will be passed automatically via proxy server
 */
 
+function getUsersList(username) {
+  loadUsers(username)
+}
+
 function loadUsers(username) {
   const url = `${API_PROXY_URL}/${GAME}/account/list/?search=${username}`
   // create request to the url and return a promise
@@ -27,5 +31,7 @@ function renderSearchResult(accounts) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // add search button click handler here
+  const username = document.getElementById('username')
+  const searchButton = document.getElementById('search')
+  searchButton.addEventListener('click', getUsersList(username))
 })
