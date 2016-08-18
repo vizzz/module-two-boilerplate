@@ -2,6 +2,8 @@ const API_PROXY_URL = 'http://188.166.73.133/wg-api'
 
 const GAME = 'wot'
 
+require('main.css')
+
 /*
 full API description you can find here:
 https://ru.wargaming.net/developers/api_reference
