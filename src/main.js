@@ -20,6 +20,15 @@ function getUsersList() {
     .catch(handleError)
 }
 
+function getUserInfo(e) {
+  const resultsNode = document.querySelector('.user-results')
+  const accountId = e.target.dataset.accountId
+
+  renderSpinner(resultsNode)
+  loadUserInfo(accountId)
+    .then((accounts) => renderSearchResult(resultsNode, accounts))
+    .catch(handleError)
+}
 
 function PAPIError(message) {
   this.message = message
@@ -60,6 +69,22 @@ function loadUsers(username) {
     })
 }
 
+function loadUserInfo(accountId) {
+  const url = `${API_PROXY_URL}/${GAME}/account/info/?account_id=${accountId}`
+
+  return fetch(url)
+    .then((resp) => resp.json())
+    .then((json) => {
+      if (json.status === "ok") {
+        return json.data[accountId]
+      } else {
+        const error = json.error || {}
+        throw new PAPIError(error.message || 'INVALID_SEARCH')
+      }
+    })
+}
+
+
 function renderSpinner(domNode) {
   domNode.innerHTML = '<div class="spinner"></div>'
 }
@@ -72,13 +97,28 @@ function renderUsername(account) {
   `
 }
 
+function renderUserStat(account) {
+  return `
+    <div class="search-results_item" data-account-id="${account.account_id}">
+      ${account.nickname}
+    </div>
+  `
+}
+
 function renderSearchResult(node, accounts) {
   const results = accounts.map(renderUsername).join('')
   node.innerHTML = results
 }
 
+function renderUserInfo(node, statistics) {
+  const results = statistics.map(renderUserStat).join('')
+  node.innerHTML = results
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const searchButton = document.getElementById('search')
+  const searchResults = document.querySelector('.search-results')
 
   searchButton.addEventListener('click', getUsersList)
+  searchResults.addEventListener('click', getUserInfo)
 })
