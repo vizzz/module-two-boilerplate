@@ -18,10 +18,13 @@ body {
   background-size: 64px 64px;
 }
 
+.results-container {
+  display: flex;
+}
+
 .search-results,
 .user-results {
-  width: 50%;
-  float: left;
+  flex: 1
 }
 
 .search-results_item {
