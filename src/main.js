@@ -17,14 +17,27 @@ function getUsersList() {
   renderSpinner(resultsNode)
   loadUsers(username)
     .then((accounts) => renderSearchResult(resultsNode, accounts))
+    .catch(handleError)
 }
+
+
+function handleError(error) {
+
+}
+
 
 function loadUsers(username) {
   const url = `${API_PROXY_URL}/${GAME}/account/list/?search=${username}`
 
   return fetch(url)
     .then((resp) => resp.json())
-    .then((json) => json.data)
+    .then((json) => {
+      if (json.status === "ok") {
+        return json.data
+      } else {
+        throw json.error
+      }
+    })
 }
 
 function renderSpinner(domNode) {
@@ -44,10 +57,6 @@ function renderUser(account) {
 }
 
 function renderSearchResult(node, accounts) {
-  // render result to the node with class name `search-results`
-  // Note! it's already exist. See index.html for more info.
-  // Each search result item should be rendered
-  // inside node with `search-results_item` class name.
   const results = accounts.map(renderUser).join('')
   node.innerHTML = results
 }
