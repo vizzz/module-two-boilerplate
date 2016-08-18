@@ -17,7 +17,7 @@ function getUsersList() {
   renderSpinner(resultsNode)
   loadUsers(username)
     .then((accounts) => renderSearchResult(resultsNode, accounts))
-    .catch(handleError)
+    .catch((error) => handleError(error, resultsNode))
 }
 
 function getUserInfo(e) {
@@ -26,8 +26,8 @@ function getUserInfo(e) {
 
   renderSpinner(resultsNode)
   loadUserInfo(accountId)
-    .then((accounts) => renderSearchResult(resultsNode, accounts))
-    .catch(handleError)
+    .then((stats) => renderUserInfo(resultsNode, stats))
+    .catch((error) => handleError(error, resultsNode))
 }
 
 function PAPIError(message) {
@@ -35,8 +35,7 @@ function PAPIError(message) {
 }
 
 
-function handleError(error) {
-  const resultsNode = document.querySelector('.search-results')
+function handleError(error, node) {
   const messages = {
     INVALID_SEARCH: 'Ничего не найдено',
     SEARCH_NOT_SPECIFIED: 'Не задана строка поиска',
@@ -47,9 +46,9 @@ function handleError(error) {
   console.log(error)
 
   if (error instanceof PAPIError) {
-    resultsNode.innerHTML = messages[error.message] || messages.GENERIC
+    node.innerHTML = messages[error.message] || messages.GENERIC
   } else {
-    resultsNode.innerHTML = messages.GENERIC
+    node.innerHTML = messages.GENERIC
   }
 }
 
@@ -76,7 +75,7 @@ function loadUserInfo(accountId) {
     .then((resp) => resp.json())
     .then((json) => {
       if (json.status === "ok") {
-        return json.data[accountId]
+        return json.data[accountId].statistics.all
       } else {
         const error = json.error || {}
         throw new PAPIError(error.message || 'INVALID_SEARCH')
@@ -97,10 +96,16 @@ function renderUsername(account) {
   `
 }
 
-function renderUserStat(account) {
+function renderUserStat(stats) {
+  const winRate = stats.battles ? (stats.wins / stats.battles * 100) : 0
+
   return `
-    <div class="search-results_item" data-account-id="${account.account_id}">
-      ${account.nickname}
+    <div class="search-results_item">
+      Количество боев: ${stats.battles}<br>
+      Победы: ${stats.wins}<br>
+      Процент побед: ${Math.floor(winRate)}%<br>
+      Суммарный опыт: ${stats.xp}<br>
+      Нанесено повреждений: ${stats.damage_dealt}
     </div>
   `
 }
@@ -111,7 +116,7 @@ function renderSearchResult(node, accounts) {
 }
 
 function renderUserInfo(node, statistics) {
-  const results = statistics.map(renderUserStat).join('')
+  const results = renderUserStat(statistics)
   node.innerHTML = results
 }
 
