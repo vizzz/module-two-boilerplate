@@ -11,11 +11,12 @@ It will be passed automatically via proxy server
 */
 
 function getUsersList() {
-  const results = document.querySelector('.search-results')
+  const resultsNode = document.querySelector('.search-results')
   const username = document.getElementById('username').value
 
-  renderSpinner(results)
-  loadUsers(username).then(renderSearchResult)
+  renderSpinner(resultsNode)
+  loadUsers(username)
+    .then((accounts) => renderSearchResult(resultsNode, accounts))
 }
 
 function loadUsers(username) {
@@ -34,18 +35,21 @@ function renderSpinner(domNode) {
   domNode.appendChild(spinner)
 }
 
-function renderSearchResult(accounts) {
+function renderUser(account) {
+  return `
+    <div class="search-results_item" data-account-id="${account.account_id}">
+      ${account.nickname}
+    </div>
+  `
+}
+
+function renderSearchResult(node, accounts) {
   // render result to the node with class name `search-results`
   // Note! it's already exist. See index.html for more info.
   // Each search result item should be rendered
   // inside node with `search-results_item` class name.
-  let result = ''
-  for (let account of accounts) {
-    const el = `<div class="search-results_item" data-account-id="${account.account_id}">${account.nickname}</div>`
-    result += el
-  }
-
-  document.querySelector('.search-results').innerHTML = result
+  const results = accounts.map(renderUser).join('')
+  node.innerHTML = results
 }
 
 document.addEventListener('DOMContentLoaded', () => {
