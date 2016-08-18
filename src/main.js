@@ -15,7 +15,7 @@ function getUsersList() {
   const username = document.getElementById('username').value
 
   renderSpinner(results)
-  loadUsers(username)
+  loadUsers(username).then(renderSearchResult)
 }
 
 function loadUsers(username) {
@@ -39,6 +39,13 @@ function renderSearchResult(accounts) {
   // Note! it's already exist. See index.html for more info.
   // Each search result item should be rendered
   // inside node with `search-results_item` class name.
+  let result = ''
+  for (let account of accounts) {
+    const el = `<div class="search-results_item" data-account-id="${account.account_id}">${account.nickname}</div>`
+    result += el
+  }
+
+  document.querySelector('.search-results').innerHTML = result
 }
 
 document.addEventListener('DOMContentLoaded', () => {
