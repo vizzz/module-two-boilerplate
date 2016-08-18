@@ -16,19 +16,29 @@ function getUsersList() {
 
   renderSpinner(resultsNode)
   loadUsers(username)
-    .then((accounts) => renderSearchResult(resultsNode, accounts), (e) => console.log)
+    .then((accounts) => renderSearchResult(resultsNode, accounts))
+    .catch(handleError)
 }
 
-function CustomError(message) {
+
+function PAPIError(message) {
   this.message = message
 }
 
-CustomError.prototype = Object.create(Error.prototype);
-CustomError.prototype.constructor = CustomError;
-
 
 function handleError(error) {
-   throw new customError(error)
+  const resultsNode = document.querySelector('.search-results')
+  const messages = {
+    INVALID_SEARCH: 'Ничего не найдено',
+    NOT_ENOUGH_SEARCH_LENGTH: 'Минимальное количество символов для поиска: 3',
+    GENERIC: 'Произошла ошибка'
+  }
+
+  if (error instanceof PAPIError) {
+    resultsNode.innerHTML = messages[error.message]
+  } else {
+    resultsNode.innerHTML = messages.GENERIC
+  }
 }
 
 
@@ -38,10 +48,11 @@ function loadUsers(username) {
   return fetch(url)
     .then((resp) => resp.json())
     .then((json) => {
-      if (json.status === "ok") {
+      if (json.status === "ok" && json.data.length) {
         return json.data
       } else {
-        throw new customError(json.error.message)
+        const message = json.error || {}
+        throw new PAPIError(json.error.message || 'INVALID_SEARCH')
       }
     })
 }
