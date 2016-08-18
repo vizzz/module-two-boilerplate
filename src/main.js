@@ -16,13 +16,19 @@ function getUsersList() {
 
   renderSpinner(resultsNode)
   loadUsers(username)
-    .then((accounts) => renderSearchResult(resultsNode, accounts))
-    .catch(handleError)
+    .then((accounts) => renderSearchResult(resultsNode, accounts), (e) => console.log)
 }
+
+function CustomError(message) {
+  this.message = message
+}
+
+CustomError.prototype = Object.create(Error.prototype);
+CustomError.prototype.constructor = CustomError;
 
 
 function handleError(error) {
-
+   throw new customError(error)
 }
 
 
@@ -35,7 +41,7 @@ function loadUsers(username) {
       if (json.status === "ok") {
         return json.data
       } else {
-        throw json.error
+        throw new customError(json.error.message)
       }
     })
 }
