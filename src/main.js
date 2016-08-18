@@ -10,7 +10,11 @@ you don't have to pass application_id query param.
 It will be passed automatically via proxy server
 */
 
-function getUsersList(username) {
+function getUsersList() {
+  const results = document.querySelector('.search-results')
+  const username = document.getElementById('username').value
+
+  renderSpinner(results)
   loadUsers(username)
 }
 
@@ -23,7 +27,6 @@ function loadUsers(username) {
 }
 
 function renderSpinner(domNode) {
-  // clean all content of passed node and then render element with `spinner` classname
   const spinner = document.createElement('div')
   spinner.className = 'spinner'
 
@@ -39,7 +42,7 @@ function renderSearchResult(accounts) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const username = document.getElementById('username').innerText
   const searchButton = document.getElementById('search')
-  searchButton.addEventListener('click', getUsersList(username))
+
+  searchButton.addEventListener('click', getUsersList)
 })
