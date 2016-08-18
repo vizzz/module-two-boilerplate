@@ -29,7 +29,10 @@ function getUserInfo(event) {
   const resultsNode = document.querySelector('.user-results')
   const accountId = event.target.dataset.accountId
   const searchResults = document.querySelector('.search-results .active')
-  const errorMessages = {}
+  const errorMessages = {
+    ACCOUNT_ID_NOT_SPECIFIED: 'ID аккаунта не указан',
+    INVALID_ACCOUNT_ID: 'Неверный ID аккаунта'
+  }
 
   if (event.target === event.currentTarget) {
     return false;
@@ -91,7 +94,7 @@ function loadUserInfo(accountId) {
         return json.data[accountId]
       } else {
         const error = json.error || {}
-        throw new PAPIError(error.message || 'INVALID_SEARCH')
+        throw new PAPIError(error.message || 'ACCOUNT_ID_NOT_SPECIFIED')
       }
     })
 }
