@@ -13,28 +13,37 @@ It will be passed automatically via proxy server
 function getUsersList() {
   const resultsNode = document.querySelector('.search-results')
   const username = document.getElementById('username').value
+  const errorMessages = {
+    INVALID_SEARCH: 'Ничего не найдено',
+    SEARCH_NOT_SPECIFIED: 'Не задана строка поиска',
+    NOT_ENOUGH_SEARCH_LENGTH: 'Минимальное количество символов для поиска: 3'
+  }
 
   renderSpinner(resultsNode)
   loadUsers(username)
     .then((accounts) => renderSearchResult(resultsNode, accounts))
-    .catch((error) => handleError(error, resultsNode))
+    .catch((error) => handleError(error, resultsNode, errorMessages))
 }
 
-function getUserInfo(e) {
+function getUserInfo(event) {
   const resultsNode = document.querySelector('.user-results')
-  const accountId = e.target.dataset.accountId
+  const accountId = event.target.dataset.accountId
   const searchResults = document.querySelector('.search-results .active')
+  const errorMessages = {}
 
+  if (event.target === event.currentTarget) {
+    return false;
+  }
 
   if (searchResults) {
     searchResults.classList.remove('active')
   }
-  e.target.classList.add('active')
+  event.target.classList.add('active')
 
   renderSpinner(resultsNode)
   loadUserInfo(accountId)
     .then((stats) => renderUserInfo(resultsNode, stats))
-    .catch((error) => handleError(error, resultsNode))
+    .catch((error) => handleError(error, resultsNode, errorMessages))
 }
 
 function PAPIError(message) {
@@ -42,13 +51,10 @@ function PAPIError(message) {
 }
 
 
-function handleError(error, node) {
-  const messages = {
-    INVALID_SEARCH: 'Ничего не найдено',
-    SEARCH_NOT_SPECIFIED: 'Не задана строка поиска',
-    NOT_ENOUGH_SEARCH_LENGTH: 'Минимальное количество символов для поиска: 3',
-    GENERIC: 'Произошла ошибка'
-  }
+function handleError(error, node, errorMessages = {}) {
+  const messages = Object.assign(errorMessages, {
+      GENERIC: 'Произошла ошибка'
+  })
 
   console.log(error)
 
@@ -82,7 +88,7 @@ function loadUserInfo(accountId) {
     .then((resp) => resp.json())
     .then((json) => {
       if (json.status === "ok") {
-        return json.data[accountId].statistics.all
+        return json.data[accountId]
       } else {
         const error = json.error || {}
         throw new PAPIError(error.message || 'INVALID_SEARCH')
@@ -103,15 +109,19 @@ function renderUsername(account) {
   `
 }
 
-function renderUserStat(stats) {
+function renderUserStat(info) {
+  const { nickname } = info
+  const stats = info.statistics.all
   const winRate = stats.battles ? (stats.wins / stats.battles * 100) : 0
 
   return `
+    <h2>${nickname}</h2>
     <div class="search-results_item">
       Количество боев: ${stats.battles}<br>
       Победы: ${stats.wins}<br>
       Процент побед: ${Math.floor(winRate)}%<br>
       Суммарный опыт: ${stats.xp}<br>
+      Средний опыт за бой: ${stats.battle_avg_xp}<br>
       Нанесено повреждений: ${stats.damage_dealt}
     </div>
   `
