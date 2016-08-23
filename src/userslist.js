@@ -1,6 +1,4 @@
-const API_PROXY_URL = 'http://188.166.73.133/wg-api'
-
-const GAME = 'wot'
+import options from 'config'
 import renderSpinner from 'spinner'
 import * as view from 'view'
 import handleError from 'error'
@@ -21,7 +19,7 @@ function getUsersList() {
 }
 
 function loadUsers(username) {
-  const url = `${API_PROXY_URL}/${GAME}/account/list/?search=${username}`
+  const url = `${options.API_PROXY_URL}/${options.GAME}/account/list/?search=${username}`
 
   return fetch(url)
     .then((resp) => resp.json())
