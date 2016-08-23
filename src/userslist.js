@@ -27,3 +27,8 @@ function loadUsers(username) {
       }
     })
 }
+
+module.exports = {
+  loadUsers,
+  getUsersList
+}
