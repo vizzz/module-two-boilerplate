@@ -2,6 +2,10 @@ const API_PROXY_URL = 'http://188.166.73.133/wg-api'
 
 const GAME = 'wot'
 
+import renderSpinner from 'spinner'
+import * as view from 'view'
+import handleError from 'error'
+
 function getUserInfo(event) {
   const resultsNode = document.querySelector('.user-results')
   const accountId = event.target.dataset.accountId
@@ -22,7 +26,7 @@ function getUserInfo(event) {
 
   renderSpinner(resultsNode)
   loadUserInfo(accountId)
-    .then((stats) => renderUserInfo(resultsNode, stats))
+    .then((stats) => view.renderUserInfo(resultsNode, stats))
     .catch((error) => handleError(error, resultsNode, errorMessages))
 }
 
@@ -40,3 +44,5 @@ function loadUserInfo(accountId) {
       }
     })
 }
+
+export default getUserInfo

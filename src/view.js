@@ -1,7 +1,3 @@
-function renderSpinner(domNode) {
-  domNode.innerHTML = '<div class="spinner"></div>'
-}
-
 function renderUsername(account) {
   return `
     <div class="search-results_item" data-account-id="${account.account_id}">
@@ -28,12 +24,12 @@ function renderUserStat(info) {
   `
 }
 
-function renderSearchResult(node, accounts) {
+export function renderSearchResult(node, accounts) {
   const results = accounts.map(renderUsername).join('')
   node.innerHTML = results
 }
 
-function renderUserInfo(node, statistics) {
+export function renderUserInfo(node, statistics) {
   const results = renderUserStat(statistics)
   node.innerHTML = results
 }

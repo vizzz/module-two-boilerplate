@@ -1,3 +1,10 @@
+const API_PROXY_URL = 'http://188.166.73.133/wg-api'
+
+const GAME = 'wot'
+import renderSpinner from 'spinner'
+import * as view from 'view'
+import handleError from 'error'
+
 function getUsersList() {
   const resultsNode = document.querySelector('.search-results')
   const username = document.getElementById('username').value
@@ -9,7 +16,7 @@ function getUsersList() {
 
   renderSpinner(resultsNode)
   loadUsers(username)
-    .then((accounts) => renderSearchResult(resultsNode, accounts))
+    .then((accounts) => view.renderSearchResult(resultsNode, accounts))
     .catch((error) => handleError(error, resultsNode, errorMessages))
 }
 
@@ -28,7 +35,4 @@ function loadUsers(username) {
     })
 }
 
-module.exports = {
-  loadUsers,
-  getUsersList
-}
+export default getUsersList

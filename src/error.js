@@ -16,3 +16,5 @@ function handleError(error, node, errorMessages = {}) {
     node.innerHTML = messages.GENERIC
   }
 }
+
+export default handleError
