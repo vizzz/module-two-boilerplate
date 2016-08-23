@@ -35,7 +35,7 @@ module.exports = {
             },
             {
                 test: /\.js$/,
-                loaders: ['babel-loader']
+                loaders: ['babel-loader', 'eslint']
             }
         ]
     },
