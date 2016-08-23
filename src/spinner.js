@@ -1,3 +1,4 @@
 export default function renderSpinner(domNode) {
-  domNode.innerHTML = '<div class="spinner"></div>'
+  const node = domNode;
+  node.innerHTML = '<div class="spinner"></div>';
 }

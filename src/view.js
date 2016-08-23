@@ -3,13 +3,13 @@ function renderUsername(account) {
     <div class="search-results_item" data-account-id="${account.account_id}">
       ${account.nickname}
     </div>
-  `
+  `;
 }
 
 function renderUserStat(info) {
-  const { nickname } = info
-  const stats = info.statistics.all
-  const winRate = stats.battles ? (stats.wins / stats.battles * 100) : 0
+  const { nickname } = info;
+  const stats = info.statistics.all;
+  const winRate = stats.battles ? ((stats.wins / stats.battles) * 100) : 0;
 
   return `
     <h2>${nickname}</h2>
@@ -21,15 +21,17 @@ function renderUserStat(info) {
       Средний опыт за бой: ${stats.battle_avg_xp}<br>
       Нанесено повреждений: ${stats.damage_dealt}
     </div>
-  `
+  `;
 }
 
 export function renderSearchResult(node, accounts) {
-  const results = accounts.map(renderUsername).join('')
-  node.innerHTML = results
+  const results = accounts.map(renderUsername).join('');
+  const element = node;
+  element.innerHTML = results;
 }
 
 export function renderUserInfo(node, statistics) {
-  const results = renderUserStat(statistics)
-  node.innerHTML = results
+  const results = renderUserStat(statistics);
+  const element = node;
+  element.innerHTML = results;
 }
