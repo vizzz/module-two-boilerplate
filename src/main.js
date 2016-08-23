@@ -1,6 +1,7 @@
 import usersList from './userslist';
 import userInfo from './userinfo';
 import './main.css';
+import '../node_modules/bootstrap/dist/css/bootstrap.css';
 
 /*
 full API description you can find here:
