@@ -1,4 +1,4 @@
-function PAPIError(message) {
+export function PAPIError(message) {
   this.message = message;
 }
 
